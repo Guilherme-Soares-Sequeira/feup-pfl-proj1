@@ -7,7 +7,12 @@ import Nat
 
 data LiteralMap k v = Empty
   | Node Char Nat (LiteralMap Char Nat) (LiteralMap Char Nat)
-  deriving (Show, Eq)
+  deriving Show
+
+instance Eq (LiteralMap k v) where
+  Empty == Empty = True
+  Node k v l r == Node k2 v2 l2 r2 = (toList (Node k v l r)) == (toList (Node k2 v2 l2 r2))
+  _ == _ = False
 
 insert :: (Char, Nat) -> LiteralMap Char Nat -> LiteralMap Char Nat
 insert (incog, expo) Empty = Node incog expo Empty Empty
@@ -62,8 +67,3 @@ reduceExponent x (Node incog expo left right)
   | x == incog = (Node incog (intToNat ((natToInt expo) - 1)) left right)
   | x < incog = (Node incog expo (reduceExponent x left) right)
   | x > incog = (Node incog expo left (reduceExponent x right))
-
--- reduceExponent x (Node incog (intToNat 1) Empty r) = r
--- reduceExponent x (Node incog (intToNat 1) l Empty) = l
--- reduceExponent x (Node incog (intToNat 1) l r)
---  | x == incog = remove x (Node incog (intToNat 1) l r)

@@ -1,8 +1,7 @@
-type Expoente = Nat
+import LiteralMap
+
 type Coeficiente = Double
-type Incognita = Char
-type Literal = (Incognita, Expoente)
-type Monomio = (Coeficiente, [Literal])
+type Monomio = (Coeficiente, LiteralMap)
 type Polinomio = [Monomio]
 
 monomAdd :: Monomio -> Monomio -> Monomio
