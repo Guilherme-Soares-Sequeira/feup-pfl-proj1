@@ -1,22 +1,30 @@
 module Monomio (Monomio,
                 add, mul, deriv, getExponent,
-                reduceExponent, toReadable) where
+                reduceExponent, toReadable, toReadableWithSign) where
 
 import qualified LiteralMap
 import Nat
 import Data.Char (intToDigit)
-import qualified LiteralMap
 
 type Coeficiente = Double
 type Monomio = (Coeficiente, LiteralMap.LiteralMap Char Nat)
 
 toReadable :: Monomio -> String
 toReadable (coef, map)
+  | coef == 0.0 = ""
   | LiteralMap.isEmpty map = show coef 
   | otherwise = show coef ++ "*" ++ LiteralMap.toReadable map
 
+toReadableWithSign :: Monomio -> String
+toReadableWithSign (coef, map)
+  | coef == 0.0 = ""
+  | LiteralMap.isEmpty map = if coef < 0 then "- " ++ show (-coef) else "+ " ++ show coef
+  | otherwise = if coef < 0 then "- " ++ show (-coef) ++ "*" ++ LiteralMap.toReadable map else "+ " ++ show coef ++ "*" ++ LiteralMap.toReadable map
+
 add :: Monomio -> Monomio -> Monomio
 add (coef1, literal1) (coef2, literal2)
+  | coef1 == 0 = (coef2, literal2)
+  | coef2 == 0 = (coef1, literal1)
   | literal1 /= literal2 = error "Monomios nao tem o mesmo expoente"
   | otherwise = (coef1+coef2, literal1)
 

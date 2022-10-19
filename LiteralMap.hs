@@ -16,7 +16,7 @@ instance Eq (LiteralMap k v) where
   _ == _ = False
 
 toReadable :: LiteralMap Char Nat -> String
-toReadable mapa = intercalate "*" [[incog] ++ "^" ++ show (natToInt expo) | (incog, expo) <- toList mapa]
+toReadable mapa = intercalate "*" [if natToInt expo /= 1 then [incog] ++ "^" ++ show (natToInt expo) else [incog] | (incog, expo) <- toList mapa]
 
 insert :: (Char, Nat) -> LiteralMap Char Nat -> LiteralMap Char Nat
 insert (incog, expo) Empty = Node incog expo Empty Empty
