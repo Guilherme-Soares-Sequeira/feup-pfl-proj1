@@ -6,7 +6,47 @@ import Nat
 import qualified Data.List
 import LiteralMap
 
+import Data.Char
+
 type Polinomio = [Monomio.Monomio]
+
+data Token
+  = PlusTok
+  | MinusTok
+  | TimesTok
+  | OpenTok
+  | CloseTok
+  | ExpoTok
+  | IncogTok Char
+  | DoubleTok Double
+  deriving (Show)
+
+lexer :: String -> [Token]
+lexer []              = []
+lexer ('+' : restStr) = PlusTok  : lexer restStr
+lexer ('*' : restStr) = TimesTok : lexer restStr 
+lexer ('(' : restStr) = OpenTok  : lexer restStr 
+lexer (')' : restStr) = CloseTok : lexer restStr
+lexer ('^' : restStr) = ExpoTok : lexer restStr
+lexer ('-' : restStr) = MinusTok : lexer restStr
+lexer (chr : restStr) 
+  | isSpace chr       = lexer restStr
+lexer str@(chr : _) 
+  | isDigit chr
+  = DoubleTok (read digitStr) : lexer restStr
+  | isAlpha chr = IncogTok (toLower chr) : lexer restStr
+  where
+      (digitStr, restStr) = (myfunc 0 str, drop (length (myfunc 0 str)) str)
+      -- local function to convert a string to a double value
+      myfunc :: Int -> String -> String
+      myfunc 0 [] = ""
+      myfunc 1 [] = ""
+      myfunc 0 (x:xs) = if isDigit x then x : myfunc 0 xs else x : myfunc 1 xs   
+      myfunc 1 (x:xs) = if isDigit x then x : myfunc 1 xs else ""
+
+  -- runtime error for all other characters:
+lexer (chr : restString) 
+  = error ("lexer: unexpected character: '" ++ show chr ++ "'")
 
 sum :: Polinomio -> Monomio.Monomio -- Assumes all elements have the same literal
 sum [x] = x
