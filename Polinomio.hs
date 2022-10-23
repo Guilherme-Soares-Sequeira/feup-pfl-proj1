@@ -204,6 +204,11 @@ toReadable [] = "0"
 toReadable [x] = Monomio.toReadable x
 toReadable (x:rest) = Monomio.toReadable x ++ " " ++ Data.List.intercalate " " [Monomio.toReadableWithSign x | x <- rest]
 
+polnorm = Polinomio.norm
+poladd = Polinomio.add
+polderiv = Polinomio.deriv
+polmul = Polinomio.mul
+poltoReadable = Polinomio.toReadable
 
 monomio1 = (1.0, LiteralMap.fromList [('x', intToNat 1), ('y', intToNat 1)])
 monomio2 = (4.0, LiteralMap.fromList [('x', intToNat 1), ('y', intToNat 1)])
