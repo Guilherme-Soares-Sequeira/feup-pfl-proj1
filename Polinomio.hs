@@ -188,7 +188,7 @@ sum (x:rest) = x `Monomio.add` Polinomio.sum rest
 norm :: Polinomio -> Polinomio
 norm [] = []
 norm [xs] = [xs | fst xs /= 0.0]
-norm (x:rest) = filter (\x -> fst x /= 0.0) [Polinomio.sum [elem | elem <- rest, snd elem == snd x ] `Monomio.add` x] ++ norm [Polinomio.sum [elem | elem <- rest, snd elem /= snd x ]]
+norm (x:rest) = filter (\x -> fst x /= 0.0) [Polinomio.sum [elem | elem <- rest, snd elem == snd x ] `Monomio.add` x] ++ norm [elem | elem <- rest, snd elem /= snd x ]
 
 add :: Polinomio -> Polinomio -> Polinomio
 add pol1 pol2 = norm (pol1 ++ pol2)
